@@ -33,15 +33,6 @@ public class BinaryNode {
 		return value;
 	}
 
-	public static void printBinaryTree(BinaryNode rootNode) {
-		if (rootNode == null) {
-			return;
-		}
-		System.out.println(rootNode);
-		printBinaryTree(rootNode.getLeft());
-		printBinaryTree(rootNode.getRight());
-	}
-
 	/**
 	 * Populates the argument mapOfLists with a linked list of elements at each
 	 * depth. The key of the map will be the depth (starting with 0).
