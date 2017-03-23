@@ -1,6 +1,6 @@
 package puzzles.binarytreelist;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,7 +11,7 @@ import org.junit.Test;
 public class TestBinaryTreeListMaker {
 
 	@Test
-	public void testMakeListPerDepthLevel() {
+	public void testMakeListPerDepthLevel_FullTree() {
 		
 		// create tree as such
 		//		     4                	Depth level = 0
@@ -58,5 +58,62 @@ public class TestBinaryTreeListMaker {
 		
 	}
 	
+	@Test
+	public void testMakeListPerDepthLevel_SingleNode() {
+		BinaryNode rootNode = new BinaryNode(4);
+		Map<Integer, LinkedList<BinaryNode>> mapOfLists = new HashMap<Integer, LinkedList<BinaryNode>>();
+		BinaryNode.createMapOfOneListPerDepth(rootNode, 0, mapOfLists);
+		
+		assertEquals(mapOfLists.get(0).get(0).getValue(), 4);
+		assertEquals(mapOfLists.get(0).size(), 1);
+		
+		assertNull(mapOfLists.get(1));
+	}
+	
+	@Test
+	public void testMakeListPerDepthLevel_NullNode() {
+		Map<Integer, LinkedList<BinaryNode>> mapOfLists = new HashMap<Integer, LinkedList<BinaryNode>>();
+		BinaryNode.createMapOfOneListPerDepth(null, 0, mapOfLists);
+		assertNull(mapOfLists.get(0));		
+	}
+	
+	@Test
+	public void testMakeListPerDepthLevel_UnbalancedTree() {
+		
+		// create tree as such
+		//		     4                	Depth level = 0
+		//		   /   				
+		//		  1     				Depth level = 1
+		//		 / \   
+		//		8   9 					Depth level = 2
+		
+		BinaryNode rootNode = new BinaryNode(4);
+		BinaryNode node1Depth1 = new BinaryNode(1);
+		BinaryNode node1Depth2 = new BinaryNode(8);
+		BinaryNode node2Depth2 = new BinaryNode(9);
+		
+		// Constructing depth 0
+		rootNode.setLeft(node1Depth1);
 
+		// Constructing depth 1
+		node1Depth1.setLeft(node1Depth2);
+		node1Depth1.setRight(node2Depth2);
+
+		Map<Integer, LinkedList<BinaryNode>> mapOfLists = new HashMap<Integer, LinkedList<BinaryNode>>();
+
+		BinaryNode.createMapOfOneListPerDepth(rootNode, 0, mapOfLists);
+		
+		assertEquals(mapOfLists.get(0).get(0).getValue(), 4);
+		assertEquals(mapOfLists.get(0).size(), 1);
+		
+		assertEquals(mapOfLists.get(1).get(0).getValue(), 1);
+		assertEquals(mapOfLists.get(1).size(), 1);		
+		
+		assertEquals(mapOfLists.get(2).get(0).getValue(), 8);
+		assertEquals(mapOfLists.get(2).get(1).getValue(), 9);
+		assertEquals(mapOfLists.get(2).size(), 2);
+		
+	}
+	
+	
 }
